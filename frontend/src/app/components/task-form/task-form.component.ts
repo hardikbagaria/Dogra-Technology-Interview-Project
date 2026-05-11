@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../../services/task.service';
@@ -8,7 +7,7 @@ import { TaskRequest, TaskStatus } from '../../models/task.model';
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss']
 })

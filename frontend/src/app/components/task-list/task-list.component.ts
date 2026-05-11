@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { DatePipe, NgClass } from '@angular/common';
 import { TaskService } from '../../services/task.service';
 import { AuthService } from '../../services/auth.service';
 import { Task, TaskStatus, TaskParams } from '../../models/task.model';
@@ -9,7 +9,7 @@ import { Task, TaskStatus, TaskParams } from '../../models/task.model';
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, DatePipe, NgClass],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
@@ -20,19 +20,15 @@ export class TaskListComponent implements OnInit {
   deleteLoading: number | null = null;
   successMsg = '';
 
-  // Pagination
   page = 0;
   size = 10;
   totalElements = 0;
   totalPages = 0;
 
-  // Sorting
   sortBy = 'createdAt';
   direction: 'asc' | 'desc' = 'desc';
 
-  // Filter
   statusFilter: TaskStatus | '' = '';
-  statusOptions: (TaskStatus | '')[] = ['', 'TODO', 'IN_PROGRESS', 'DONE'];
 
   constructor(
     private taskService: TaskService,
@@ -62,7 +58,7 @@ export class TaskListComponent implements OnInit {
         this.totalPages = res.totalPages;
         this.loading = false;
       },
-      error: (err) => {
+      error: () => {
         this.error = 'Failed to load tasks. Please try again.';
         this.loading = false;
       }

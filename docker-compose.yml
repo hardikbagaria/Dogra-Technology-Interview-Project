@@ -1,0 +1,65 @@
+version: '3.9'
+
+services:
+
+  mysql:
+    image: mysql:8
+
+    container_name: mysql-container
+
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: springboot-container
+
+    restart: always
+
+    depends_on:
+      - mysql
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appdb
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppassword
+
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: angular-container
+
+    restart: always
+
+    depends_on:
+      - backend
+
+    ports:
+      - "4200:80"
+
+    networks:
+      - app-network
+
+volumes:
+  mysql-data:
+
+networks:
+  app-network:
+    driver: bridge
